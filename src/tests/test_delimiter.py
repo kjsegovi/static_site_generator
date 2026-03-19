@@ -2,74 +2,67 @@ from delimiter import split_nodes_delimiter, split_nodes_image, split_nodes_link
 from textnode import TextNode, TextType
 import unittest
 
-
-def test_code_delimiter():
-    node = TextNode("This is text with a `code block` word", TextType.TEXT)
-    new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-    assert new_nodes == [
-        TextNode("This is text with a ", TextType.TEXT),
-        TextNode("code block", TextType.CODE),
-        TextNode(" word", TextType.TEXT),
-    ]
-
-
-def test_bold_delimiter():
-    node = TextNode("This is text with a **bold phrase** in it", TextType.TEXT)
-    new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
-    assert new_nodes == [
-        TextNode("This is text with a ", TextType.TEXT),
-        TextNode("bold phrase", TextType.BOLD),
-        TextNode(" in it", TextType.TEXT),
-    ]
-
-
-def test_multiple_delimited_sections():
-    node = TextNode("One `code` and another `block` here", TextType.TEXT)
-    new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-    assert new_nodes == [
-        TextNode("One ", TextType.TEXT),
-        TextNode("code", TextType.CODE),
-        TextNode(" and another ", TextType.TEXT),
-        TextNode("block", TextType.CODE),
-        TextNode(" here", TextType.TEXT),
-    ]
-
-
-def test_non_text_node_passes_through():
-    node = TextNode("already bold", TextType.BOLD)
-    new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-    assert new_nodes == [TextNode("already bold", TextType.BOLD)]
-
-
-def test_unmatched_delimiter_raises():
-    node = TextNode("This has a `broken delimiter", TextType.TEXT)
-    try:
-        split_nodes_delimiter([node], "`", TextType.CODE)
-        assert False, "Expected an exception to be raised"
-    except Exception:
-        pass
-
-def test_split_images(self):
-    node = TextNode(
-        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
-        TextType.TEXT,
-    )
-    new_nodes = split_nodes_image([node])
-    self.assertListEqual(
-        [
-            TextNode("This is text with an ", TextType.TEXT),
-            TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
-            TextNode(" and another ", TextType.TEXT),
-            TextNode(
-                "second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"
-            ),
-        ],
-        new_nodes,
-    )
-
-
 class TestSplitNodesLink(unittest.TestCase):
 
+    def test_code_delimiter(self):
+        node = TextNode("This is text with a `code block` word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        assert new_nodes == [
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.TEXT),
+        ]
+
+    def test_bold_delimiter(self):
+        node = TextNode("This is text with a **bold phrase** in it", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
+        assert new_nodes == [
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("bold phrase", TextType.BOLD),
+            TextNode(" in it", TextType.TEXT),
+        ]
+
+    def test_multiple_delimited_sections(self):
+        node = TextNode("One `code` and another `block` here", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        assert new_nodes == [
+            TextNode("One ", TextType.TEXT),
+            TextNode("code", TextType.CODE),
+            TextNode(" and another ", TextType.TEXT),
+            TextNode("block", TextType.CODE),
+            TextNode(" here", TextType.TEXT),
+        ]
+
+    def test_non_text_node_passes_through(self):
+        node = TextNode("already bold", TextType.BOLD)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        assert new_nodes == [TextNode("already bold", TextType.BOLD)]
+
+    def test_unmatched_delimiter_raises(self):
+        node = TextNode("This has a `broken delimiter", TextType.TEXT)
+        try:
+            split_nodes_delimiter([node], "`", TextType.CODE)
+            assert False, "Expected an exception to be raised"
+        except Exception:
+            pass
+
+    def test_split_images(self):
+        node = TextNode(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+            TextType.TEXT,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", TextType.TEXT),
+                TextNode("image", TextType.IMAGES, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", TextType.TEXT),
+                TextNode(
+                    "second image", TextType.IMAGES, "https://i.imgur.com/3elNhQu.png"
+                ),
+            ],
+            new_nodes,
+        )
     def test_single_link(self):
         node = TextNode(
             "Click [here](https://www.google.com) for more",
