@@ -61,9 +61,47 @@ class LeafNode(HTMLNode):
             front_tag = f"<{self.tag}"
             back_tag = f"</{self.tag}>"
             props = ""
-            for prop in self.props:
-                props += f" {prop}=\"{self.props[prop]}\""
+            if self.props:
+                for prop in self.props:
+                    props += f" {prop}=\"{self.props[prop]}\""
 
             front_tag += props + ">"
 
             return front_tag + self.value + back_tag
+
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+
+    def __repr__(self):
+        return f"ParentNode(tag={self.tag}, children={self.children}, props={self.props}"
+
+    def __eq__(self, other):
+        if (
+            self.tag == other.tag
+            and self.value == other.value
+            and self.props == other.props
+        ):
+            return True
+        else:
+            return False
+
+    def to_html(self):
+        if not self.tag:
+            raise ValueError("The Parent Node does not have a tag")
+        if not self.children:
+            raise ValueError(f"The children list is empty")
+
+        start_tag = f"<{self.tag}"
+        props = ""
+        if self.props:
+            for prop in self.props:
+                props += f" {prop}=\"{self.props[prop]}\""
+        end_tag = f"</{self.tag}>"
+
+        child_tags = ""
+        for child in self.children:
+            # print(f"a child: {child}")
+            child_tags += child.to_html()
+
+        return start_tag + props + ">" + child_tags + end_tag
