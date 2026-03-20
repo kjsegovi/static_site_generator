@@ -15,12 +15,12 @@ def copy_static_to_public(directory):
     for item in list_dir:
         item_path = os.path.join(directory, item)
         if os.path.isdir(item_path):
-            new_dir = item_path.replace('public', 'static')
+            new_dir = item_path.replace('static/', 'public/')
             print(f"making new directory at: {new_dir}")
             os.mkdir(new_dir)
             copy_static_to_public(item_path)
         else:
-            item_new_path = item_path.replace("public", "static")
+            item_new_path = item_path.replace("static/", "public/")
             print(f"making new file at: {item_new_path}")
             shutil.copy(item_path, item_new_path)
 
