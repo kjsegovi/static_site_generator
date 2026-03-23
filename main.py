@@ -69,8 +69,8 @@ def generate_page(from_path, template_path, dest_path, basepath):
     html_title = extract_title(markdown_from_path)
     template_from_path = template_from_path.replace("{{ Title }}", html_title)
     template_from_path = template_from_path.replace("{{ Content }}", html_node)
-    template_from_path = template_from_path.replace('href="/"', f'href="{basepath}"')
-    template_from_path = template_from_path.replace('src="/"', f'src="{basepath}"')
+    template_from_path = template_from_path.replace('href="/', f'href="{basepath}')
+    template_from_path = template_from_path.replace('src="/', f'src="{basepath}')
     # print(template_from_path)
     # check to see if the path file exists, doing it with pathlib...
     file_checker = Path(dest_path).expanduser()
