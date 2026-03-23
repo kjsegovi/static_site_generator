@@ -12,6 +12,7 @@ def copy_static_to_public_caller():
         print("docs doesn't exists. skipping...")
 
     os.mkdir("./docs")
+    Path("./docs/.nojekyll").touch()
 
     static_path = os.path.abspath("static/")
     copy_static_to_public(static_path)
