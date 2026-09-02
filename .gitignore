@@ -1,3 +1,27 @@
 __pycache__/
 .idea
 .venv
+
+# --- hermes-secure (auto-appended) ---
+config.json
+!config.example.json
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.credential
+.hermes/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+_build/
+target/
+dist/
+build/
+.venv/
+venv/
+.DS_Store
+.idea/
+.vscode/
